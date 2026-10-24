@@ -117,7 +117,7 @@ export function ensureThreeLibLoaded() {
       return;
     }
     const script = document.createElement("script");
-    script.src = "three.min.js";
+    script.src = `${import.meta.env.BASE_URL}three.min.js`;
     script.async = true;
     script.dataset.zperiodThree = "1";
     script.onload = () => resolve(window.THREE);
