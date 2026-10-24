@@ -106,9 +106,11 @@ function ensureDriverTutorialAssets() {
 }
 
 /**
- * Initializes and triggers the element tutorial on the first visit.
+ * Initializes the element tutorial when explicitly requested.
  */
 export async function initElementTutorial(force = false) {
+    // Tutorials are opt-in through the question-mark button only.
+    if (!force) return;
     const tutorialKey = 'hasSeenElementTutorialV7';
 
     // Check if the user has already seen the tutorial
@@ -244,6 +246,8 @@ export async function initElementTutorial(force = false) {
  * Initializes and triggers the balancer tool tutorial.
  */
 export async function initBalancerTutorial(force = false) {
+    // Tutorials are opt-in through the question-mark button only.
+    if (!force) return;
     const tutorialKey = 'hasSeenBalancerTutorialV1';
 
     if (!force && localStorage.getItem(tutorialKey)) {
@@ -310,6 +314,8 @@ export async function initBalancerTutorial(force = false) {
  * Initializes and triggers the predictor tool tutorial.
  */
 export async function initPredictorTutorial(force = false) {
+    // Tutorials are opt-in through the question-mark button only.
+    if (!force) return;
     const tutorialKey = 'hasSeenPredictorTutorialV1';
 
     if (!force && localStorage.getItem(tutorialKey)) {
@@ -330,6 +336,8 @@ export async function initPredictorTutorial(force = false) {
  * Initializes and triggers the molar mass tool tutorial.
  */
 export async function initMolarMassTutorial(force = false) {
+    // Tutorials are opt-in through the question-mark button only.
+    if (!force) return;
     const tutorialKey = 'hasSeenMolarMassTutorialV1';
 
     if (!force && localStorage.getItem(tutorialKey)) {
@@ -347,6 +355,8 @@ export async function initMolarMassTutorial(force = false) {
 }
 
 export async function initSolubilityTutorial(force = false) {
+    // Tutorials are opt-in through the question-mark button only.
+    if (!force) return;
     const tutorialKey = 'hasSeenSolubilityTutorialV1';
 
     if (!force && localStorage.getItem(tutorialKey)) {
@@ -978,6 +988,8 @@ function startSolubilityTour(driver, tutorialKey, delayMs = 800) {
  * Initializes and triggers the Virtual Lab tool tutorial.
  */
 export async function initVirtualLabTutorial(force = false) {
+    // Tutorials are opt-in through the question-mark button only.
+    if (!force) return;
     const tutorialKey = 'hasSeenVirtualLabTutorialV1';
 
     if (!force && localStorage.getItem(tutorialKey)) {

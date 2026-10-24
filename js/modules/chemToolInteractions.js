@@ -488,7 +488,6 @@ function attachBalancerListeners() {
       if (modeSlider) modeSlider.style.transform = "translateX(138px)";
 
       // Trigger interactive tutorial for predict mode on first entrance
-      import("./tutorialController.js").then((m) => m.initPredictorTutorial(false));
     }
   }
 
@@ -1342,6 +1341,12 @@ function attachVirtualLabListeners() {
     elementPicker.style.top = 'auto';
     elementPicker.style.bottom = bottom + 'px';
     elementPicker.style.left = left + 'px';
+    // Header controls sit outside the scene; open their menu inside its top edge.
+    if (buttonPoint.y < 0) {
+      elementPicker.style.top = '8px';
+      elementPicker.style.bottom = 'auto';
+      elementPicker.style.maxHeight = Math.max(40, shell.offsetHeight - 16) + 'px';
+    }
     elementPicker.classList.add('open');
 
     // Handle selection

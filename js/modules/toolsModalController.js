@@ -31,6 +31,15 @@ export function createToolsModalController(options = {}) {
   const toolContentCache = new Map();
   let openRequestToken = 0;
   let activeToolType = null;
+  const labHeaderQuery = window.matchMedia("(max-width: 767px) and (orientation: portrait), (pointer: coarse) and (orientation: landscape) and (max-height: 767px)");
+  function syncLabHeaderControls() {
+    const header = document.querySelector("#feature-modal-content .feature-mobile-header");
+    const scene = document.getElementById("virtual-lab-scene");
+    const controls = document.querySelector("#feature-modal-content .virtual-lab-controls");
+    if (!header || !scene || !controls) return;
+    (labHeaderQuery.matches ? header : scene).appendChild(controls);
+  }
+  labHeaderQuery.addEventListener("change", syncLabHeaderControls);
 
   function getModalElements() {
     return {
@@ -151,7 +160,9 @@ export function createToolsModalController(options = {}) {
       const content = await getCachedToolContent(toolType);
       if (!content || requestToken !== openRequestToken) return;
 
+      document.querySelector(".feature-mobile-header > .virtual-lab-controls")?.remove();
       body.innerHTML = content;
+      syncLabHeaderControls();
       const headerTitle = document.getElementById("feature-mobile-title");
       if (headerTitle) headerTitle.textContent = body.querySelector(".tool-padding-label")?.textContent || "";
 
@@ -159,15 +170,6 @@ export function createToolsModalController(options = {}) {
         requestAnimationFrame(() => {
           attachToolEventListeners(toolType);
           
-          if (toolType === "balancer") {
-            import("./tutorialController.js").then((m) => m.initBalancerTutorial(false));
-          } else if (toolType === "molar-mass") {
-            import("./tutorialController.js").then((m) => m.initMolarMassTutorial(false));
-          } else if (toolType === "solubility") {
-            import("./tutorialController.js").then((m) => m.initSolubilityTutorial(false));
-          } else if (toolType === "virtual-lab") {
-            import("./tutorialController.js").then((m) => m.initVirtualLabTutorial(false));
-          }
         });
       }
     } catch (error) {

@@ -2770,7 +2770,6 @@ export function showModal(element) {
     );
   }
   modal.classList.add("active");
-  initElementTutorial();
   document.title = `Zperiod - ${localizeElementName(element)}`;
   document.body.classList.add("hide-nav");
   if (isSimplifiedView) {
@@ -2930,14 +2929,22 @@ function populateLevel3(element, eduData) { }
 
 // ===== Swipe Slider =====
 function initSwipeSlider() {
-  const slider = document.querySelector(".cards-slider");
-  const dots = [...document.querySelectorAll(".slider-dots .dot")];
-  const slides = [...document.querySelectorAll(".card-slide")];
+  const slider = document.querySelector("#element-modal .cards-slider");
+  const dots = [...document.querySelectorAll("#element-modal .slider-dots .dot")];
+  const slides = [...document.querySelectorAll("#element-modal .card-slide")];
   const lockBtn = document.getElementById("level-lock-btn");
 
   if (!slider || slides.length < 2) return;
 
   const maxIndex = Math.min(slides.length - 1, 3);
+
+  let activeIndex = -1;
+  const pane = slider.closest(".modal-info-pane");
+  function fitActiveCard() {
+    const card = slides[activeIndex]?.firstElementChild;
+    if (card) slider.style.height = Math.ceil(card.offsetHeight) + "px";
+  }
+  if (window._elementCardSizeObserver) window._elementCardSizeObserver.disconnect();
 
   initCardSlider({
     abortKey: "_elementSliderAbort",
@@ -2967,12 +2974,19 @@ function initSwipeSlider() {
     },
     isModalActive: () => !!modal?.classList.contains("active"),
     onIndexChange: (index) => {
+      const changed = activeIndex !== index;
+      activeIndex = index;
       const element = window.currentAtomElement;
       if (element) switchToLevel(String(index + 1), element);
+      fitActiveCard();
+      if (changed && pane) pane.scrollTo({ top: 0, behavior: "instant" });
     },
   });
-
-
+  if (typeof ResizeObserver !== "undefined") {
+    const observer = new ResizeObserver(fitActiveCard);
+    slides.forEach(slide => { if (slide.firstElementChild) observer.observe(slide.firstElementChild); });
+    window._elementCardSizeObserver = observer;
+  }
 }
 
 // ===== Initialize Modal UI (call on DOMContentLoaded) =====

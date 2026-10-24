@@ -15,6 +15,7 @@ let targetCameraZ = 16;
 
 let _container = null;
 let eventAbortController = null;
+let containerResizeObserver = null;
 let threeLoadPromise = null;
 
 let raycaster = null;
@@ -145,6 +146,22 @@ export function init3DScene(container) {
   }
 
   _container = container || _container;
+  if (_container && typeof ResizeObserver !== "undefined") {
+    if (containerResizeObserver) containerResizeObserver.disconnect();
+    let lastWidth = 0;
+    let lastHeight = 0;
+    containerResizeObserver = new ResizeObserver(() => {
+      const width = _container.clientWidth;
+      const height = _container.clientHeight;
+      if (!width || !height || (width === lastWidth && height === lastHeight)) return;
+      lastWidth = width;
+      lastHeight = height;
+      onWindowResize();
+      reset3DView();
+      renderScene();
+    });
+    containerResizeObserver.observe(_container);
+  }
   if (renderer) {
     if (
       _container &&
@@ -545,11 +562,12 @@ export function updateAtomStructure(element) {
 
 // ===== Window Resize Handler =====
 export function onWindowResize() {
-  if (!camera || !renderer) return;
+  if (!camera || !renderer || !_container) return;
   if (_container.clientHeight === 0) {
     const visualPane = document.querySelector(".modal-visual-pane");
     if (visualPane) _container.style.height = visualPane.clientHeight + "px";
   }
+  if (!_container.clientWidth || !_container.clientHeight) return;
   camera.aspect = _container.clientWidth / _container.clientHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(_container.clientWidth, _container.clientHeight);
@@ -740,6 +758,10 @@ export function animateAtom() {
 
 // ===== Cleanup / Dispose =====
 export function cleanup3D(full) {
+  if (full && containerResizeObserver) {
+    containerResizeObserver.disconnect();
+    containerResizeObserver = null;
+  }
   if (animationId) cancelAnimationFrame(animationId);
   animationId = null;
   if (full && eventAbortController) {

@@ -887,3 +887,167 @@
   #dashboard-page .dashboard-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .dashboard-card { padding: 22px 18px; }
 }
+
+
+
+/* Mobile periodic-table performance */
+@media (hover: none) and (pointer: coarse) {
+
+  #periodic-table.eit-active .element {
+    transition:
+      background-color 120ms linear,
+      opacity 120ms linear;
+
+    will-change: auto;
+  }
+
+  #periodic-table.eit-active .element.eit-colored {
+    box-shadow: none;
+  }
+
+  #periodic-table .element {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+
+
+@media (max-width: 767px),
+       (pointer: coarse) and
+       (orientation: landscape) and
+       (max-height: 500px) {
+
+  #main-container {
+    min-width: 0 !important;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  #periodic-table {
+    width: 100% !important;
+    min-width: 0;
+    max-width: 100%;
+    transform: none !important;
+    margin-top: 0 !important;
+  }
+
+  #periodic-table > .element {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+/* Mobile lab controls share the title row instead of covering the experiment. */
+@media (max-width: 767px) and (orientation: portrait), (pointer: coarse) and (orientation: landscape) and (max-height: 767px) {
+  #feature-modal-body .virtual-lab-controls {
+    position: fixed;
+    top: 4px;
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: calc(100% - 240px);
+    height: 36px;
+    gap: 6px;
+    z-index: 240;
+  }
+  #feature-modal-body .virtual-lab-controls .virtual-lab-btn {
+    min-height: 34px;
+    padding: 6px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 767px) and (orientation: portrait), (pointer: coarse) and (orientation: landscape) and (max-height: 767px) {
+  #feature-modal-content .feature-mobile-header > .virtual-lab-controls {
+    position: absolute;
+    top: 4px; bottom: auto; left: 50%; right: auto;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: calc(100% - 240px);
+    height: 36px;
+    gap: 6px;
+    z-index: 240;
+  }
+  #feature-modal-content .feature-mobile-header .virtual-lab-btn {
+    min-height: 34px; padding: 6px 10px; font-size: 12px; white-space: nowrap;
+  }
+}
+/* Compact mobile element identity leaves more space for the detail cards. */
+@media (max-width: 767px), (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
+  #element-modal .level-header { height: 64px; padding: 8px 12px; }
+  #element-modal .headline-content { height: 100%; padding: 0; align-items: center; }
+  #element-modal .headline-left-group { gap: 8px; }
+  #element-modal .headline-symbol { font-size: 36px; }
+  #element-modal .headline-mass, #element-modal .headline-atomic { font-size: 16px; }
+  #element-modal #headline-name { font-size: clamp(20px, 5vw, 26px) !important; margin: 0 8px !important; line-height: 1.15; }
+  #element-modal .simplified-element-box { height: calc(100% - 64px); }
+}
+@media (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
+  #element-modal .level-header { height: 60px; }
+  #element-modal .simplified-element-box { height: calc(100% - 60px); }
+}
+/* One vertical scroll area for element details; cards grow with their content. */
+#element-modal .modal-info-pane,
+#element-modal .modal-info-pane.no-scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 12px;
+  scroll-snap-type: none;
+}
+#element-modal .simplified-element-box {
+  height: auto !important;
+  min-height: 0;
+  overflow: visible;
+  grid-template-rows: auto;
+  padding-bottom: 16px;
+}
+#element-modal .cards-slider-wrapper,
+#element-modal .cards-slider,
+#element-modal .card-slide,
+#element-modal .green-rectangle,
+#element-modal .yellow-rectangle,
+#element-modal .blue-rectangle,
+#element-modal .red-rectangle,
+#element-modal .card-info-container,
+#element-modal .ions-section {
+  height: auto;
+  min-height: 0;
+  max-height: none;
+}
+#element-modal .cards-slider { align-items: flex-start; }
+#element-modal .card-slide,
+#element-modal .green-rectangle,
+#element-modal .yellow-rectangle,
+#element-modal .blue-rectangle,
+#element-modal .red-rectangle,
+#element-modal .card-info-container,
+#element-modal .ions-section {
+  overflow: visible;
+  flex-shrink: 0;
+}
+#element-modal .slider-controls {
+  position: sticky;
+  bottom: 8px;
+  left: auto;
+  justify-self: center;
+  margin: 16px auto 0;
+  transform: none;
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 30;
+}
+
+/* The selected card alone determines the vertical scroll range. */
+#element-modal .cards-slider-wrapper { overflow: hidden; }
+#element-modal .cards-slider { overflow: hidden; flex-shrink: 0; }
+#element-modal .modal-info-pane.no-scroll > .scroll-spacer { display: none; }
+#element-modal .slider-controls {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  margin: 12px auto 0;
+  transform: none;
+}

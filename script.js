@@ -453,11 +453,40 @@ function initPeriodicTableScale() {
   }
 
   window._scalePeriodicTable = (force = false) => scaleTable(force);
-  let resizeTimer;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => requestAnimationFrame(() => scaleTable(true)), 50);
-  });
+ 
+let resizeTimer;
+let settleTimer;
+
+function refreshResponsiveLayout() {
+  clearTimeout(resizeTimer);
+  clearTimeout(settleTimer);
+
+  resizeTimer = setTimeout(() => {
+    requestAnimationFrame(() => {
+      scaleTable(true);
+    });
+  }, 100);
+
+  // A final recalculation after rotation settles
+  settleTimer = setTimeout(() => {
+    requestAnimationFrame(() => {
+      scaleTable(true);
+    });
+  }, 350);
+}
+
+window.addEventListener(
+  "resize",
+  refreshResponsiveLayout,
+  { passive: true }
+);
+
+window.addEventListener(
+  "orientationchange",
+  refreshResponsiveLayout,
+  { passive: true }
+);
+
   window.addEventListener("load", () => scaleTable(true));
   // Also run immediately
   requestAnimationFrame(() => scaleTable(true));
@@ -552,6 +581,7 @@ function initMobileNavigation() {
       toggle.focus();
     }
   });
+
   window.matchMedia("(max-width: 767px), (pointer: coarse) and (orientation: landscape) and (max-height: 500px)").addEventListener("change", close);
 }
 
