@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   // GitHub Pages repository path
-  base: '/ZY-Chemistry-Lab/',
+  base: '/DLS-Chemistry-Lab/',
 
   server: {
     proxy: {
