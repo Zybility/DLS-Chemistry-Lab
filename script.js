@@ -113,11 +113,17 @@ async function ensureIonsTableReady() {
   ionsTableReady = true;
 }
 
+
 async function ensureWorksheetReady() {
   if (worksheetReady) return;
-  await loadClassicScriptOnce("js/worksheet-generator.js");
+
+  await loadClassicScriptOnce(
+    `${import.meta.env.BASE_URL}js/worksheet-generator.js`
+  );
+
   worksheetReady = true;
 }
+
 
 function loadHeroAtomModule() {
   if (heroAtomModulePromise) return heroAtomModulePromise;
